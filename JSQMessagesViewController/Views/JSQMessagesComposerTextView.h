@@ -18,6 +18,11 @@
 
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSInteger, JSQMessagesComposerTextViewVerticalAlignment) {
+    JSQMessagesComposerTextViewVerticalAlignmentDefault,
+    JSQMessagesComposerTextViewVerticalAlignmentCenter
+};
+
 @class JSQMessagesComposerTextView;
 
 /**
@@ -56,6 +61,11 @@
  *  The object that acts as the paste delegate of the text view.
  */
 @property (weak, nonatomic) id<JSQMessagesComposerTextViewPasteDelegate> pasteDelegate;
+
+/**
+ *  The vertical alignment for the displayed text.
+ */
+@property (assign, nonatomic) JSQMessagesComposerTextViewVerticalAlignment verticalAlignment;
 
 /**
  *  Determines whether or not the text view contains text after trimming white space 

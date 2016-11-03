@@ -41,7 +41,6 @@
     self.scrollIndicatorInsets = UIEdgeInsetsMake(cornerRadius, 0.0f, cornerRadius, 0.0f);
     
     self.textContainerInset = UIEdgeInsetsMake(4.0f, 2.0f, 4.0f, 2.0f);
-    self.contentInset = UIEdgeInsetsMake(1.0f, 0.0f, 1.0f, 0.0f);
     
     self.scrollEnabled = YES;
     self.scrollsToTop = NO;
@@ -61,7 +60,9 @@
     
     _placeHolder = nil;
     _placeHolderTextColor = [UIColor lightGrayColor];
+    _verticalAlignment = JSQMessagesComposerTextViewVerticalAlignmentDefault;
     
+    [self invalidateContentInset];
     [self jsq_addTextViewNotificationObservers];
 }
 
@@ -156,8 +157,26 @@
     if ([self.text length] == 0 && self.placeHolder) {
         [self.placeHolderTextColor set];
         
-        [self.placeHolder drawInRect:CGRectInset(rect, 7.0f, 5.0f)
-                      withAttributes:[self jsq_placeholderTextAttributes]];
+        NSDictionary * attributes = [self jsq_placeholderTextAttributes];
+        CGRect insetRect = CGRectInset(rect, 7.0f, 5.0f);
+        
+        switch (self.verticalAlignment) {
+            case JSQMessagesComposerTextViewVerticalAlignmentCenter:
+            {
+                CGSize placeHolderTextSize = [self.placeHolder sizeWithAttributes:attributes];
+                CGRect placeHolderRect = CGRectMake(insetRect.origin.x,
+                                                    insetRect.origin.y + (insetRect.size.height - placeHolderTextSize.height) * 0.5f,
+                                                    insetRect.size.width,
+                                                    placeHolderTextSize.height);
+                [self.placeHolder drawInRect:placeHolderRect withAttributes:attributes];
+                break;
+            }
+            case JSQMessagesComposerTextViewVerticalAlignmentDefault:
+            default:
+                [self.placeHolder drawInRect:insetRect
+                              withAttributes:attributes];
+                break;
+        }
     }
 }
 
@@ -212,6 +231,21 @@
     return @{ NSFontAttributeName : self.font,
               NSForegroundColorAttributeName : self.placeHolderTextColor,
               NSParagraphStyleAttributeName : paragraphStyle };
+}
+
+#pragma mark - Alignment
+
+- (void)invalidateContentInset
+{
+    if ( self.verticalAlignment == JSQMessagesComposerTextViewVerticalAlignmentDefault ) {
+        self.contentInset = UIEdgeInsetsMake(1.0f, 0.0f, 1.0f, 0.0f);
+        return;
+    }
+    
+    CGSize size = [self sizeThatFits:self.frame.size];
+    CGFloat offsetY = (CGRectGetHeight(self.frame) - size.height) * 0.5f;
+    offsetY = offsetY < 0.0f ? 0.0f : offsetY;
+    self.contentInset = UIEdgeInsetsMake(offsetY, 0.0f, 0.0f, 0.0f);
 }
 
 @end
