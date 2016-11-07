@@ -137,24 +137,28 @@
 {
     [super setText:text];
     [self setNeedsDisplay];
+    [self invalidateContentInset];
 }
 
 - (void)setAttributedText:(NSAttributedString *)attributedText
 {
     [super setAttributedText:attributedText];
     [self setNeedsDisplay];
+    [self invalidateContentInset];
 }
 
 - (void)setFont:(UIFont *)font
 {
     [super setFont:font];
     [self setNeedsDisplay];
+    [self invalidateContentInset];
 }
 
 - (void)setTextAlignment:(NSTextAlignment)textAlignment
 {
     [super setTextAlignment:textAlignment];
     [self setNeedsDisplay];
+    [self invalidateContentInset];
 }
 
 - (void)paste:(id)sender
@@ -234,6 +238,7 @@
 - (void)jsq_didReceiveTextViewNotification:(NSNotification *)notification
 {
     [self setNeedsDisplay];
+    [self invalidateContentInset];
 }
 
 #pragma mark - Utilities
