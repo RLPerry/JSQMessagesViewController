@@ -60,7 +60,7 @@ typedef NS_ENUM(NSInteger, JSQMessagesComposerTextViewVerticalAlignment) {
 /**
  *  The object that acts as the paste delegate of the text view.
  */
-@property (weak, nonatomic) id<JSQMessagesComposerTextViewPasteDelegate> pasteDelegate;
+@property (weak, nonatomic) id<JSQMessagesComposerTextViewPasteDelegate> jsq_pasteDelegate;
 
 /**
  *  The vertical alignment for the displayed text.
